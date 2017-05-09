@@ -35,6 +35,7 @@ gem 'simple_form'
 
 gem 'bootstrap-sass'
 gem 'cocoon'
+gem 'aasm'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
