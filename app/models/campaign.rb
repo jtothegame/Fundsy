@@ -15,35 +15,43 @@ class Campaign < ApplicationRecord
   belongs_to :user, optional: true
   validates :title, presence: true, uniqueness: true
 
-   include AASM
+  geocoded_by :address
+  after_validation :geocode # this will make an HTTP request to Google to get
+                            # the coordinates for the addrses
 
-   aasm whiny_transitions: false do
-     state :draft, initial: true
-     state :published
-     state :cancelled
-     state :funded
-     state :unfunded
+  def has_map?
+    longitude.present? && latitude.present?
+  end
 
-     event :publish do
-       transitions from: :draft, to: :published
-     end
+  include AASM
 
-     event :fund do
-       transitions from: :published, to: :funded
-     end
+  aasm whiny_transitions: false do
+   state :draft, initial: true
+   state :published
+   state :cancelled
+   state :funded
+   state :unfunded
 
-     event :unfunded do
-       transitions from: :published, to: :unfunded
-     end
-
-     event :cancel do
-       transitions from: [:published, :funded], to: :cancelled
-     end
-
-     event :relaunch do
-       transitions from: :cancelled, to: :draft
-     end
-
+   event :publish do
+     transitions from: :draft, to: :published
    end
+
+   event :fund do
+     transitions from: :published, to: :funded
+   end
+
+   event :unfunded do
+     transitions from: :published, to: :unfunded
+   end
+
+   event :cancel do
+     transitions from: [:published, :funded], to: :cancelled
+   end
+
+   event :relaunch do
+     transitions from: :cancelled, to: :draft
+   end
+
+    end
 
 end
