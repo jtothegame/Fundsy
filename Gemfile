@@ -44,6 +44,8 @@ gem 'underscore-rails'
 gem 'devise'
 gem 'activeadmin', github: 'activeadmin'
 
+gem 'stripe'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
